@@ -1,0 +1,25 @@
+# ملفات لا يجب رفعها على Vercel
+node_modules/
+npm-debug.log*
+.npm
+.git
+.gitignore
+.env
+.env.local
+.env.production
+
+# ملفات التطوير المحلية
+server.js
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# مجلدات غير ضرورية
+sounds/
+assets/.gitkeep
+
+# سكريبتات وأدلة
+deploy.sh
+DEPLOYMENT.md
+worklog.md
+*.log

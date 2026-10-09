@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "name": "classico-algerie",
+  "public": true,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/clubs", "destination": "/index.html" },
+    { "source": "/clubs/:id", "destination": "/index.html" },
+    { "source": "/derby", "destination": "/index.html" },
+    { "source": "/standings", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*).(html|js|css)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "source": "/teams-data.js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
+      ]
+    }
+  ]
+}

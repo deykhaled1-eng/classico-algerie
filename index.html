@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0a0a0a">
+<title>كلاسيكو الجزائر</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI','Cairo',Tahoma,sans-serif}
+:root{--t1:#2ecc71;--t2:#e74c3c;--gold:#f1c40f;--card:#1a1a1a;--card2:#222;--muted:#bbb}
+html,body{height:100%;overflow:hidden}
+body{background:radial-gradient(ellipse at top,#1a1a3e 0%,#0a0a0a 50%,#000 100%);color:#fff}
+.page{height:100vh;display:flex;flex-direction:column;padding:8px;max-width:1200px;margin:0 auto;gap:8px}
+
+/* ====== الرأس ====== */
+.head{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,var(--card),var(--card2));padding:10px 14px;border-radius:12px;border:1px solid #444;flex-shrink:0;box-shadow:0 4px 15px rgba(0,0,0,.4)}
+.head-title{font-size:1.2rem;color:var(--gold);font-weight:bold;text-shadow:0 0 8px rgba(241,196,15,.5);display:flex;align-items:center;gap:6px}
+.head-title .ic{font-size:1.4rem}
+.head-status{display:flex;align-items:center;gap:10px;font-size:.9rem}
+.status-pill{display:flex;align-items:center;gap:5px;background:#000;padding:5px 10px;border-radius:20px;border:1px solid #333}
+.sd{width:10px;height:10px;border-radius:50%;background:var(--gold);animation:p 1.5s infinite}
+.sd.c{background:var(--t1);box-shadow:0 0 8px var(--t1)}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.4}}
+.tm{font-family:'Courier New',monospace;color:var(--gold);font-weight:bold;font-size:.95rem}
+.gear-btn{background:linear-gradient(135deg,var(--gold),#f39c12);color:#000;border:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;transition:.3s;box-shadow:0 4px 12px rgba(241,196,15,.4)}
+.gear-btn:hover{transform:rotate(45deg) scale(1.1)}
+.gear-btn.active{transform:rotate(45deg)}
+
+/* ====== لوحة الإعدادات المنزلقة ====== */
+.settings{position:absolute;top:70px;left:8px;right:8px;background:linear-gradient(135deg,var(--card),var(--card2));border:2px solid var(--gold);border-radius:14px;padding:14px;z-index:50;transform:translateY(-150%);opacity:0;pointer-events:none;transition:.4s;box-shadow:0 10px 30px rgba(0,0,0,.7)}
+.settings.show{transform:translateY(0);opacity:1;pointer-events:auto}
+.settings h3{color:var(--gold);font-size:1.05rem;margin-bottom:10px;border-bottom:1px solid #444;padding-bottom:6px}
+.fg{margin-bottom:8px}
+.fg label{font-size:.85rem;color:var(--muted);display:block;margin-bottom:4px;font-weight:bold}
+.fg input{background:#000;border:1px solid #444;color:#fff;padding:10px 12px;border-radius:8px;width:100%;font-size:1rem}
+.fg input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(241,196,15,.2)}
+.rw{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tp{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin-top:8px}
+.tpi{text-align:center}
+.tl{position:relative;width:60px;height:60px;margin:0 auto 5px}
+.lg{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:bold;border:3px solid #fff;background-size:cover;background-position:center;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+.t1 .lg{background:var(--t1);color:#fff}.t2 .lg{background:var(--t2);color:#fff}
+.lg.hi{background-image:var(--li);background-color:#000;text-indent:-9999px}
+.ub{position:absolute;bottom:-3px;right:-3px;background:var(--gold);color:#000;border:2px solid #fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.75rem;cursor:pointer;z-index:5;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.xb{position:absolute;top:-3px;left:-3px;background:#e74c3c;color:#fff;border:2px solid #fff;border-radius:50%;width:18px;height:18px;display:none;align-items:center;justify-content:center;font-size:.65rem;cursor:pointer;z-index:5}
+.lg.hi~.xb{display:flex}
+.tp select{background:#000;border:1px solid #444;color:#fff;padding:7px;border-radius:6px;font-size:.88rem;width:100%;margin-top:4px;cursor:pointer}
+.pv{font-size:1.3rem;color:var(--gold);padding-top:20px;font-weight:bold}
+.btn-row{display:flex;gap:8px;margin-top:10px}
+.btn{background:linear-gradient(135deg,var(--gold),#f39c12);color:#000;border:none;padding:10px 14px;border-radius:8px;font-size:.95rem;font-weight:bold;cursor:pointer;flex:1;transition:.2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(241,196,15,.4)}
+.btn-blue{background:linear-gradient(135deg,#3498db,#2980b9);color:#fff}
+.btn-red{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff}
+
+/* ====== بانر التعليمات ====== */
+.banner{background:linear-gradient(135deg,#f1c40f,#f39c12);color:#000;padding:8px 12px;border-radius:10px;text-align:center;font-weight:bold;font-size:.92rem;border:2px solid #fff;flex-shrink:0;box-shadow:0 4px 12px rgba(241,196,15,.3)}
+.banner .ic{font-size:1.1rem}
+.banner .bt{background:#000;color:#fff;padding:2px 8px;border-radius:5px;font-size:.85rem;margin:0 2px}
+.banner .bt.t1{background:var(--t1)}.banner .bt.t2{background:var(--t2)}
+
+/* ====== لوحة المباراة ====== */
+.match{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;background:linear-gradient(135deg,var(--card),var(--card2));padding:14px;border-radius:14px;border:1px solid #444;position:relative;overflow:hidden;flex-shrink:0;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+.match::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--t1),var(--gold),var(--t2))}
+.mt{text-align:center;padding:4px;transition:.4s;border-radius:10px}
+.mt.w{background:rgba(255,255,255,.06);transform:scale(1.03);box-shadow:0 0 20px rgba(241,196,15,.2)}
+.ml{width:60px;height:60px;margin:0 auto 6px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:bold;border:3px solid #fff;background-size:cover;background-position:center;animation:fl 3s infinite;box-shadow:0 4px 15px rgba(0,0,0,.5)}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.mt1 .ml{background:var(--t1);color:#fff}.mt2 .ml{background:var(--t2);color:#fff}
+.ml.hi{background-image:var(--li);background-color:#000;text-indent:-9999px}
+.mt h2{font-size:1rem;margin-bottom:3px}
+.mt1 h2{color:var(--t1);text-shadow:0 0 8px var(--t1)}.mt2 h2{color:var(--t2);text-shadow:0 0 8px var(--t2)}
+.mm{font-size:.72rem;color:var(--muted);margin-bottom:3px}
+.mbg{display:inline-block;background:rgba(255,255,255,.1);padding:3px 8px;border-radius:5px;font-size:.75rem;font-weight:bold;margin-top:2px}
+.ms{font-size:2.5rem;font-weight:900;background:#000;padding:6px 18px;border-radius:10px;margin:6px 0;display:inline-block;min-width:80px;border:3px solid #333;font-family:'Courier New',monospace;box-shadow:inset 0 2px 8px rgba(0,0,0,.5)}
+.mt1 .ms{border-color:var(--t1);color:var(--t1);text-shadow:0 0 12px var(--t1)}
+.mt2 .ms{border-color:var(--t2);color:var(--t2);text-shadow:0 0 12px var(--t2)}
+.ms.sc{animation:pp .7s}
+@keyframes pp{0%{transform:scale(1)}30%{transform:scale(1.5);filter:brightness(1.8)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+.vs{font-size:1.4rem;font-weight:900;color:var(--gold);text-shadow:0 0 12px var(--gold);animation:vr 4s infinite}
+@keyframes vr{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.1)}}
+.sp{color:var(--muted);font-size:.78rem;margin-top:2px}
+
+/* ====== شريط التقدم ====== */
+.prog{background:linear-gradient(135deg,var(--card),var(--card2));padding:10px;border-radius:10px;border:1px solid #444;flex-shrink:0}
+.pl{display:flex;justify-content:space-between;margin-bottom:5px;font-size:.85rem;font-weight:bold}
+.pb{width:100%;height:24px;background:#000;border-radius:12px;overflow:hidden;display:flex;border:2px solid #333;box-shadow:inset 0 2px 6px rgba(0,0,0,.5)}
+.pb>div{height:100%;transition:width .6s;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:.78rem;position:relative;overflow:hidden}
+.p1{background:linear-gradient(90deg,var(--t1),#27ae60)}.p2{background:linear-gradient(90deg,#c0392b,var(--t2))}
+.pb>div::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:sm 2s infinite}
+@keyframes sm{0%{left:-100%}100%{left:100%}}
+
+/* ====== الألواح الجانبية ====== */
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;min-height:0}
+.panel{background:linear-gradient(135deg,var(--card),var(--card2));padding:10px;border-radius:10px;border:1px solid #444;display:flex;flex-direction:column;min-height:0;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.panel h3{font-size:.95rem;margin-bottom:6px;color:var(--gold);display:flex;align-items:center;gap:5px;border-bottom:1px solid #333;padding-bottom:4px}
+.cl{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:5px;min-height:0}
+.cl::-webkit-scrollbar{width:5px}.cl::-webkit-scrollbar-track{background:#000;border-radius:3px}.cl::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+.cm{background:#000;padding:8px 10px;border-radius:8px;font-size:.88rem;border-left:4px solid #666;animation:si .3s;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.cm.t1{border-left-color:var(--t1);background:linear-gradient(90deg,rgba(46,204,113,.1),#000)}
+.cm.t2{border-left-color:var(--t2);background:linear-gradient(90deg,rgba(231,76,60,.1),#000)}
+.cu{font-weight:bold;color:var(--gold);font-size:.82rem;margin-bottom:2px}
+.ct{color:#fff;line-height:1.4}
+@keyframes si{from{opacity:0;transform:translateX(15px)}to{opacity:1;transform:translateX(0)}}
+.sup{display:flex;align-items:center;gap:6px;background:#000;padding:6px 8px;border-radius:6px;box-shadow:0 2px 5px rgba(0,0,0,.3)}
+.rk{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:.75rem;background:#333;color:#fff;flex-shrink:0}
+.rk.g{background:linear-gradient(135deg,var(--gold),#f39c12);color:#000}
+.rk.s{background:linear-gradient(135deg,#bdc3c7,#95a5a6)}
+.rk.b{background:linear-gradient(135deg,#cd7f32,#a0522d)}
+.sn{font-weight:bold;font-size:.82rem;flex:1}.sp2{font-weight:bold;color:var(--gold);font-size:.88rem}
+.em{text-align:center;color:var(--muted);padding:10px;font-size:.85rem;font-style:italic}
+
+#cf{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999}
+#ts{position:fixed;bottom:10px;right:10px;z-index:1000;display:flex;flex-direction:column;gap:6px;max-width:280px}
+.ts2{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid #444;border-right:4px solid var(--gold);padding:8px 12px;border-radius:8px;animation:ti .4s;display:flex;align-items:center;gap:6px;box-shadow:0 4px 15px rgba(0,0,0,.5)}
+.ts2.t1{border-right-color:var(--t1)}.ts2.t2{border-right-color:var(--t2)}
+@keyframes ti{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
+.ts2.h{animation:to .3s forwards}@keyframes to{to{opacity:0;transform:translateX(100%)}}
+.t-ic{font-size:1.3rem}
+.t-ttl{font-weight:bold;font-size:.88rem}
+.t-msg{font-size:.78rem;color:var(--muted);margin-top:1px}
+@media(max-width:600px){
+.head-title{font-size:1rem}.head-title .ic{font-size:1.2rem}
+.head-status{gap:6px}
+.ms{font-size:2rem;min-width:65px;padding:5px 14px}.ml{width:48px;height:48px;font-size:.9rem}
+.mt h2{font-size:.88rem}.vs{font-size:1.1rem}
+.banner{font-size:.82rem;padding:6px 10px}
+.cm{font-size:.82rem;padding:6px 8px}
+.panel h3{font-size:.85rem}
+}
+</style>
+</head>
+<body>
+<canvas id="cf"></canvas>
+<div id="ts"></div>
+<div class="page">
+<div class="head">
+<div class="head-title"><span class="ic">⚽</span> كلاسيكو الجزائر</div>
+<div class="head-status">
+<div class="status-pill"><span class="sd" id="sd"></span><span id="stx">تجريبي</span></div>
+<div class="status-pill">⏱️ <span class="tm" id="tm">00:00</span></div>
+<div class="status-pill">👥 <span id="vw">0</span></div>
+<button class="gear-btn" id="gear">⚙️</button>
+</div>
+</div>
+<div class="settings" id="settings">
+<h3>⚙️ إعدادات الاتصال والفرق</h3>
+<div class="rw">
+<div class="fg"><label>🔗 السيرفر (Render):</label><input id="su" placeholder="https://app.onrender.com"></div>
+<div class="fg"><label>📱 اسم TikTok:</label><input id="tu" placeholder="username"></div>
+</div>
+<div class="tp">
+<div class="tpi"><div class="tl t1"><div class="lg" id="l1">MCA</div><button class="xb" id="x1">✕</button><button class="ub" id="u1">📷</button><input type="file" id="f1" accept="image/*" style="display:none"></div><select id="t1s"></select></div>
+<div class="pv">VS</div>
+<div class="tpi"><div class="tl t2"><div class="lg" id="l2">USMA</div><button class="xb" id="x2">✕</button><button class="ub" id="u2">📷</button><input type="file" id="f2" accept="image/*" style="display:none"></div><select id="t2s"></select></div>
+</div>
+<div class="btn-row">
+<button class="btn" id="con">🔗 اتصال</button>
+<button class="btn btn-blue" id="dm">🎮 تجريبي</button>
+<button class="btn btn-red" id="rs">🔄 إعادة</button>
+</div>
+</div>
+<div class="banner"><span class="ic">📺</span> اكتب <span class="bt t1" id="b1">MCA</span> أو <span class="bt t2" id="b2">USMA</span> <span class="ic">🌹</span> وردة=+5 <span class="ic">🎁</span> هدية=+20-100</div>
+<div class="match">
+<div class="mt mt1" id="tb1"><div class="ml" id="m1">MCA</div><h2 id="n1">مولودية الجزائر</h2><div class="mm" id="me1">الجزائر • 1921 • 9 ألقاب</div><div class="mbg">اكتب: <span id="bg1">MCA</span></div><div class="ms" id="s1">0</div><div class="sp">الدعم: <span id="su1">0</span></div></div>
+<div class="vs">VS</div>
+<div class="mt mt2" id="tb2"><div class="ml" id="m2">USMA</div><h2 id="n2">اتحاد العاصمة</h2><div class="mm" id="me2">الجزائر • 1937 • 8 ألقاب</div><div class="mbg">اكتب: <span id="bg2">USMA</span></div><div class="ms" id="s2">0</div><div class="sp">الدعم: <span id="su2">0</span></div></div>
+</div>
+<div class="prog"><div class="pl"><span style="color:var(--t1)">🟢 <span id="l1l">MCA</span>: <strong id="p1">50%</strong></span><span style="color:var(--t2)"><span id="l2l">USMA</span>: <strong id="p2">50%</strong> 🔴</span></div><div class="pb"><div id="pb1" class="p1" style="width:50%">MCA</div><div id="pb2" class="p2" style="width:50%">USMA</div></div></div>
+<div class="panels">
+<div class="panel"><h3>💬 التعليقات المباشرة</h3><div class="cl" id="cf2"><div class="em">لا تعليقات بعد</div></div></div>
+<div class="panel"><h3>🏆 الأبطال</h3><div class="cl" id="sl"><div class="em">كن أول البطل!</div></div></div>
+</div>
+</div>
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script>
+const C=[{id:'MCA',n:'مولودية الجزائر',s:'MCA',c:'الجزائر العاصمة',f:1921,t:9,col:'#2ecc71',k:['mca','مولودية','مك','mouloudia']},{id:'USMA',n:'اتحاد العاصمة',s:'USMA',c:'الجزائر العاصمة',f:1937,t:8,col:'#e74c3c',k:['usma','اتحاد','اسما','soustara']},{id:'JSK',n:'شبيبة القبائل',s:'JSK',c:'تيزي وزو',f:1946,t:14,col:'#f1c40f',k:['jsk','شبيبة','القبائل','kabylie']},{id:'CRB',n:'شباب بلوزداد',s:'CRB',c:'الجزائر العاصمة',f:1962,t:10,col:'#e74c3c',k:['crb','بلوزداد','شباب']},{id:'ESS',n:'وفاق سطيف',s:'ESS',c:'سطيف',f:1958,t:8,col:'#2c3e50',k:['ess','وفاق','سطيف','setif']},{id:'MCO',n:'مولودية وهران',s:'MCO',c:'وهران',f:1917,t:4,col:'#e74c3c',k:['mco','وهران','hamra']}];
+const $=id=>document.getElementById(id);
+let t1=C[0],t2=C[1],s1=0,s2=0,su1=0,su2=0,sec=0,vw=0,sp=new Map(),di=null,ti=null,ac=null,sk=null,vl=new Map();
+function gi(id){return C.find(c=>c.id===id)}
+function init(){const a=$('t1s'),b=$('t2s');C.forEach(c=>{a.add(new Option(c.n+' ('+c.s+')',c.id));b.add(new Option(c.n+' ('+c.s+')',c.id))});a.value='MCA';b.value='USMA'}
+function apply(){if($('t1s').value===$('t2s').value){toast(null,'⚠️','لا يمكن اختيار نفس الفريق');return false}t1=gi($('t1s').value);t2=gi($('t2s').value);ui();return true}
+function ui(){document.documentElement.style.setProperty('--t1',t1.col);document.documentElement.style.setProperty('--t2',t2.col);
+$('l1').textContent=t1.s;$('l2').textContent=t2.s;$('m1').textContent=t1.s;$('n1').textContent=t1.n;$('me1').textContent=t1.c+' • '+t1.f+' • '+t1.t+' ألقاب';$('bg1').textContent=t1.s;$('l1l').textContent=t1.s;$('pb1').textContent=t1.s;$('b1').textContent=t1.s;
+$('m2').textContent=t2.s;$('n2').textContent=t2.n;$('me2').textContent=t2.c+' • '+t2.f+' • '+t2.t+' ألقاب';$('bg2').textContent=t2.s;$('l2l').textContent=t2.s;$('pb2').textContent=t2.s;$('b2').textContent=t2.s;
+s1=s2=su1=su2=0;sp.clear();sec=0;vl.clear();upd();rs();lo(t1.id,$('l1'));lo(t1.id,$('m1'));lo(t2.id,$('l2'));lo(t2.id,$('m2'))}
+function lo(id,e){if(!e)return;const s=localStorage.getItem('lg_'+id);if(s){e.classList.add('hi');e.style.setProperty('--li','url('+s+')');e.textContent=''}else{e.classList.remove('hi');e.style.removeProperty('--li');const c=gi(id);e.textContent=c?c.s:''}}
+function ul(f,id){if(!f)return;if(!f.type.startsWith('image/')){toast(null,'⚠️','صورة فقط');return}if(f.size>2e6){toast(null,'⚠️','حجم كبير');return}const r=new FileReader();r.onload=e=>{try{localStorage.setItem('lg_'+id,e.target.result);lo(id,$('l1'));lo(id,$('m1'));lo(id,$('l2'));lo(id,$('m2'));toast(null,'✅','تم حفظ الشعار')}catch(er){toast(null,'⚠️','خطأ')}};r.readAsDataURL(f)}
+function rl(id){localStorage.removeItem('lg_'+id);lo(id,$('l1'));lo(id,$('m1'));lo(id,$('l2'));lo(id,$('m2'));toast(null,'🗑️','تم الحذف')}
+$('t1s').onchange=()=>{t1=gi($('t1s').value);ui()};$('t2s').onchange=()=>{t2=gi($('t2s').value);ui()};
+$('u1').onclick=()=>$('f1').click();$('u2').onclick=()=>$('f2').click();
+$('f1').onchange=e=>ul(e.target.files[0],t1.id);$('f2').onchange=e=>ul(e.target.files[0],t2.id);
+$('x1').onclick=()=>rl(t1.id);$('x2').onclick=()=>rl(t2.id);
+$('gear').onclick=()=>{const s=$('settings'),g=$('gear');s.classList.toggle('show');g.classList.toggle('active')};
+document.addEventListener('click',e=>{if(!$('settings').contains(e.target)&&e.target!==$('gear')&&!$('gear').contains(e.target)){$('settings').classList.remove('show');$('gear').classList.remove('active')}});
+$('con').onclick=()=>{const u=$('tu').value.trim();const sv=$('su').value.trim();if(sv)localStorage.setItem('srv',sv);if(u){ina();con(u);$('settings').classList.remove('show');$('gear').classList.remove('active')}else{toast(null,'⚠️','أدخل اسم TikTok')}};
+$('dm').onclick=()=>{ina();demo();$('settings').classList.remove('show');$('gear').classList.remove('active')};
+$('rs').onclick=()=>{s1=s2=su1=su2=0;sec=0;vw=0;sp.clear();vl.clear();$('cf2').innerHTML='<div class="em">لا تعليقات بعد</div>';$('tm').textContent='00:00';$('vw').textContent='0';upd();rs();wh();toast(null,'🔄','تمت الإعادة')};
+function ina(){if(!ac)ac=new(window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume()}
+function ch(){ina();const c=ac,n=c.currentTime,bs=c.sampleRate*2,b=c.createBuffer(1,bs,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<bs;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/bs,1.5);const s=c.createBufferSource();s.buffer=b;const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=800;const g=c.createGain();g.gain.setValueAtTime(0,n);g.gain.linearRampToValueAtTime(0.4,n+0.1);g.gain.exponentialRampToValueAtTime(0.001,n+2);s.connect(f);f.connect(g);g.connect(c.destination);s.start(n);s.stop(n+2)}
+function gl(){ina();const c=ac,n=c.currentTime;[523.25,659.25,783.99].forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.value=f;const st=n+i*0.1;g.gain.setValueAtTime(0,st);g.gain.linearRampToValueAtTime(0.25,st+0.02);g.gain.exponentialRampToValueAtTime(0.001,st+0.4);o.connect(g);g.connect(c.destination);o.start(st);o.stop(st+0.4)})}
+function wh(){ina();const c=ac,n=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(2000,n);o.frequency.setValueAtTime(2200,n+0.1);o.frequency.setValueAtTime(2000,n+0.2);g.gain.setValueAtTime(0,n);g.gain.linearRampToValueAtTime(0.3,n+0.02);g.gain.exponentialRampToValueAtTime(0.001,n+0.3);o.connect(g);g.connect(c.destination);o.start(n);o.stop(n+0.3)}
+function upd(){$('s1').textContent=s1;$('s2').textContent=s2;$('su1').textContent=su1;$('su2').textContent=su2;const t=s1+s2,p1=t===0?50:Math.round(s1/t*100),p2=100-p1;$('pb1').style.width=p1+'%';$('pb2').style.width=p2+'%';$('p1').textContent=p1+'%';$('p2').textContent=p2+'%';if(s1>s2){$('tb1').classList.add('w');$('tb2').classList.remove('w')}else if(s2>s1){$('tb2').classList.add('w');$('tb1').classList.remove('w')}else{$('tb1').classList.remove('w');$('tb2').classList.remove('w')}}
+function ag(side,p,user){if(side==='t1'){s1+=p;su1++;$('s1').classList.remove('sc');void $('s1').offsetWidth;$('s1').classList.add('sc')}else{s2+=p;su2++;$('s2').classList.remove('sc');void $('s2').offsetWidth;$('s2').classList.add('sc')}gl();setTimeout(ch,100);cf2(side);if(user)asp(user.name,side,p);upd()}
+function dt(text){if(!text)return null;const l=text.toLowerCase();let m1=0,m2=0;t1.k.forEach(k=>{if(l.includes(k.toLowerCase()))m1++});t2.k.forEach(k=>{if(l.includes(k.toLowerCase()))m2++});return m1>m2?'t1':m2>m1?'t2':null}
+function hc(u,text,id){const s=dt(text);acm(u,text,s);if(s){if(id)vl.set(id,{team:s,time:Date.now()});ag(s,1,{name:u});const tn=s==='t1'?t1.s:t2.s;toast(s,'💬 تعليق',u+' دعم '+tn+'!')}}
+function hg(u,g,p,id){let s=null;if(id&&vl.has(id)){const r=vl.get(id);if(Date.now()-r.time<6e5)s=r.team}if(!s)s=Math.random()>0.5?'t1':'t2';ag(s,p,{name:u});const tn=s==='t1'?t1.s:t2.s;toast(s,'🎁 هدية',u+' أرسل '+g+' (+'+p+') → '+tn)}
+function acm(u,text,s){const e=$('cf2').querySelector('.em');if(e)e.remove();const el=document.createElement('div');el.className='cm'+(s?' '+s:'');el.innerHTML='<div class="cu">'+esc(u)+'</div><div class="ct">'+esc(text)+'</div>';$('cf2').insertBefore(el,$('cf2').firstChild);while($('cf2').children.length>15)$('cf2').removeChild($('cf2').lastChild)}
+function asp(n,s,p){const k=n+'_'+s;if(sp.has(k)){const x=sp.get(k);x.points+=p;x.count=(x.count||1)+1}else sp.set(k,{name:n,side:s,points:p,count:1});rs()}
+function rs(){const a=Array.from(sp.values()).sort((x,y)=>y.points-x.points).slice(0,8);if(!a.length){$('sl').innerHTML='<div class="em">كن أول البطل!</div>';return}$('sl').innerHTML=a.map((s,i)=>{const rc=i===0?'g':i===1?'s':i===2?'b':'';const tn=s.side==='t1'?t1.s:t2.s;return'<div class="sup"><div class="rk '+rc+'">'+(i+1)+'</div><div class="sn">'+esc(s.name)+'<div style="font-size:.65rem;color:'+(s.side==='t1'?t1.col:t2.col)+'">'+tn+'</div></div><div class="sp2">'+s.points+'</div></div>'}).join('')}
+function toast(s,t,m){const el=document.createElement('div');el.className='ts2'+(s?' '+s:'');el.innerHTML='<div class="t-ic">'+(s==='t1'?'🟢':s==='t2'?'🔴':'⭐')+'</div><div><div class="t-ttl">'+esc(t)+'</div><div class="t-msg">'+esc(m)+'</div></div>';$('ts').appendChild(el);setTimeout(()=>{el.classList.add('h');setTimeout(()=>el.remove(),300)},3000)}
+function esc(t){const d=document.createElement('div');d.textContent=String(t);return d.innerHTML}
+function timer(){if(ti)clearInterval(ti);ti=setInterval(()=>{sec++;const m=String(Math.floor(sec/60)).padStart(2,'0'),s=String(sec%60).padStart(2,'0');$('tm').textContent=m+':'+s},1000)}
+const cv=$('cf'),cx=cv.getContext('2d');let pt=[],an=false;cv.width=innerWidth;cv.height=innerHeight;addEventListener('resize',()=>{cv.width=innerWidth;cv.height=innerHeight});
+function cf2(s){const c=s==='t1'?t1:t2,cs=[c.col,'#f1c40f','#fff'];for(let i=0;i<60;i++)pt.push({x:Math.random()*cv.width,y:-10,vx:(Math.random()-0.5)*6,vy:Math.random()*3+2,sz:Math.random()*6+3,col:cs[Math.floor(Math.random()*3)],rot:Math.random()*360,rs:(Math.random()-0.5)*8});if(!an)anim()}
+function anim(){an=true;cx.clearRect(0,0,cv.width,cv.height);pt=pt.filter(p=>p.y<cv.height+20);pt.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.15;p.rot+=p.rs;cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot*Math.PI/180);cx.fillStyle=p.col;cx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz*0.6);cx.restore()});if(pt.length)requestAnimationFrame(anim);else an=false}
+function demo(){if(di)clearInterval(di);$('stx').textContent='تجريبي';$('sd').classList.remove('c');const nm=['أحمد','Mohamed','ياسين','Sara','خالد','Amira','Bilal','Noura','Samir','Lina','Yacine','Imene'],wd=['مولودية','اتحاد','MCA','USMA','الأفضل','رقم 1','هيا','فريقي','بطل','قوي'];di=setInterval(()=>{const r=Math.random(),n=nm[Math.floor(Math.random()*nm.length)],id='d_'+n;if(r<0.7){const tn=Math.random()>0.5?t1.s:t2.s;const tx=Math.random()>0.4?tn+': '+wd[Math.floor(Math.random()*wd.length)]:tn;hc(n,tx,id)}else{const gr=Math.random();let gn,p;if(gr<0.6){gn='وردة';p=5}else if(gr<0.85){gn='هدية';p=20}else if(gr<0.95){gn='Lion';p=100}else{gn='هدية عملاقة';p=150+Math.floor(Math.random()*150)}hg(n,gn,p,id)}vw+=Math.floor(Math.random()*5)-1;if(vw<0)vw=0;$('vw').textContent=vw.toLocaleString('ar')},2500)}
+function gs(){const u=new URLSearchParams(location.search).get('server');if(u){localStorage.setItem('srv',u);return u}return localStorage.getItem('srv')||'http://localhost:3000'}
+function con(u){if(sk)sk.disconnect();try{sk=io(gs(),{reconnection:true,reconnectionAttempts:5,transports:['websocket','polling']});sk.on('connect',()=>{if(di){clearInterval(di);di=null}$('sd').classList.add('c');$('stx').textContent='@'+u;toast(null,'✅ تم الاتصال','تم الربط مع تيك توك');wh();sk.emit('set-username',{username:u,team1:t1.id,team2:t2.id})});sk.on('disconnect',()=>{$('sd').classList.remove('c');$('stx').textContent='انقطع';demo()});sk.on('connect_error',()=>{toast(null,'⚠️ خطأ','تعذر الاتصال بالسيرفر');demo()});sk.on('tiktok-event',ev);sk.on('viewer-count',d=>{vw=d.count;$('vw').textContent=vw.toLocaleString('ar')})}catch(e){demo()}}
+function ev(d){if(d.type==='comment')hc(d.username||'مشاهد',d.text,d.uniqueId||'');else if(d.type==='gift'){const p=d.points||5,u=d.username||'مشاهد',gn=d.giftName||'هدية',id=d.uniqueId||'';let s=d.team;if(s===t1.id)s='t1';else if(s===t2.id)s='t2';if(!s&&id&&vl.has(id)){const r=vl.get(id);if(Date.now()-r.time<6e5)s=r.team}if(!s)s='t1';ag(s,p,{name:u});toast(s,'🎁 هدية',u+' أرسل '+gn+' (+'+p+')')}else if(d.type==='system'){toast(null,'ℹ️ معلومة',d.message||'رسالة من السيرفر')}}
+$('su').oninput=e=>localStorage.setItem('srv',e.target.value.trim());
+$('tu').oninput=e=>localStorage.setItem('tkn',e.target.value.trim());
+init();const sv=localStorage.getItem('srv');if(sv)$('su').value=sv;const tn=localStorage.getItem('tkn');if(tn)$('tu').value=tn;ui();timer();demo();
+</script>
+</body>
+</html>

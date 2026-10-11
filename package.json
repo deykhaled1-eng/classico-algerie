@@ -1,0 +1,18 @@
+{
+  "name": "classico-algerie-tiktool",
+  "version": "3.0.0",
+  "description": "موقع كلاسيكو الجزائر - مدعوم بـ TikTool API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.5.4",
+    "axios": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

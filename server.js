@@ -1,7 +1,6 @@
 /**
  * ====== سيرفر كلاسيكو الجزائر - مع TikTool API ======
- * يستخدم TikTool API بدلاً من tiktok-live-connector
- * يعمل على Render, Railway, Fly.io, أي منصة!
+ * يستخدم TikTool API الصحيح والمحدث
  */
 
 const express = require('express');
@@ -17,9 +16,9 @@ const io = new Server(server, { cors: { origin: "*", methods: ["GET", "POST"] } 
 app.use(express.static(__dirname));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
-// ====== إعدادات TikTool ======
+// ====== إعدادات TikTool (تم تصحيح النطاق إلى api.tik.tools) ======
 const TIKTOOL_API_KEY = process.env.TIKTOOL_API_KEY || 'tk_fce884c0faafb288fc91795e25709168f75a7f4129e6ecd4';
-const TIKTOOL_BASE_URL = 'https://api.tiktool.io/v1';
+const TIKTOOL_BASE_URL = 'https://api.tik.tools/v1';
 
 const GIFT_POINTS = {
     'Rose': 5, 'TikTok': 10, 'Finger Heart': 15,
@@ -84,10 +83,8 @@ async function connectToTikTok(socket, username) {
         timestamp: Date.now()
     });
 
-    // إيقاف أي polling سابق
     if (state.pollingInterval) clearInterval(state.pollingInterval);
 
-    // 1) تحقق من حالة البث
     try {
         const statusResp = await axios.get(`${TIKTOOL_BASE_URL}/live/${username}`, {
             headers: { 'Authorization': `Bearer ${TIKTOOL_API_KEY}` },
@@ -103,7 +100,6 @@ async function connectToTikTok(socket, username) {
                 message: `⚠️ البث غير مباشر حالياً لحساب @${username}`,
                 timestamp: Date.now()
             });
-            // حاول مرة أخرى بعد دقيقة
             setTimeout(() => connectToTikTok(socket, username), 60000);
             return;
         }
@@ -114,7 +110,6 @@ async function connectToTikTok(socket, username) {
             timestamp: Date.now()
         });
 
-        // 2) ابدأ استطلاع التعليقات
         startPolling(socket, username, state);
 
     } catch (err) {
@@ -125,7 +120,6 @@ async function connectToTikTok(socket, username) {
             timestamp: Date.now()
         });
 
-        // إعادة المحاولة بعد 10 ثواني
         setTimeout(() => connectToTikTok(socket, username), 10000);
     }
 }
@@ -137,7 +131,6 @@ function startPolling(socket, username, state) {
 
     state.pollingInterval = setInterval(async () => {
         try {
-            // جلب التعليقات الجديدة
             const commentsResp = await axios.get(`${TIKTOOL_BASE_URL}/live/${username}/comments`, {
                 headers: { 'Authorization': `Bearer ${TIKTOOL_API_KEY}` },
                 params: { cursor: state.lastCursor || '' },
@@ -156,7 +149,6 @@ function startPolling(socket, username, state) {
             }
             if (data.cursor) state.lastCursor = data.cursor;
 
-            // جلب الهدايا الجديدة
             try {
                 const giftsResp = await axios.get(`${TIKTOOL_BASE_URL}/live/${username}/gifts`, {
                     headers: { 'Authorization': `Bearer ${TIKTOOL_API_KEY}` },
@@ -177,7 +169,6 @@ function startPolling(socket, username, state) {
                 if (giftData.cursor) state.lastGiftCursor = giftData.cursor;
             } catch (e) {}
 
-            // تحديث عدد المشاهدين
             try {
                 const viewResp = await axios.get(`${TIKTOOL_BASE_URL}/live/${username}/viewers`, {
                     headers: { 'Authorization': `Bearer ${TIKTOOL_API_KEY}` },
@@ -191,7 +182,7 @@ function startPolling(socket, username, state) {
         } catch (err) {
             console.log(`⚠️ خطأ في الاستطلاع:`, err.message);
         }
-    }, 2000); // كل ثانيتين
+    }, 2000);
 }
 
 // ====== معالجة التعليقات ======
@@ -230,16 +221,13 @@ function handleGift(socket, state, gift) {
     const username = gift.user?.nickname || gift.username || gift.nickname || 'مشاهد';
     const uniqueId = gift.user?.unique_id || gift.uniqueId || username;
 
-    // احتساب النقاط
     let points = GIFT_POINTS[giftName] || GIFT_POINTS['default'];
     points *= repeatCount;
 
-    // الهدايا فوق 100 تُحتسب بقيمتها الفعلية
     if (diamondCount > 0 && diamondCount * repeatCount > 100) {
         points = diamondCount * repeatCount;
     }
 
-    // كشف الفريق من آخر تعليق للمشاهد
     let side = null;
     if (uniqueId && state.viewerTeams.has(uniqueId)) {
         const viewer = state.viewerTeams.get(uniqueId);
@@ -257,7 +245,6 @@ function handleGift(socket, state, gift) {
     });
 }
 
-// كشف الفريق من النص
 function detectTeamFromText(text, team1Id, team2Id) {
     if (!text) return null;
     const lower = text.toLowerCase();
@@ -273,7 +260,6 @@ function detectTeamFromText(text, team1Id, team2Id) {
     return null;
 }
 
-// تنظيف دوري
 setInterval(() => {
     const now = Date.now();
     for (const state of clientStates.values()) {
@@ -291,19 +277,10 @@ const PORT = process.env.PORT || 8080;
 server.listen(PORT, '0.0.0.0', () => {
     console.log('');
     console.log('========================================================');
-    console.log('  ⚽ كلاسيكو الجزائر - سيرفر TikTool API');
+    console.log('  ⚽ كلاسيكو الجزائر - سيرفر TikTool API (محدث)');
     console.log('========================================================');
     console.log(`  🌐 http://localhost:${PORT}`);
     console.log(`  🔑 TikTool API: ${TIKTOOL_API_KEY.substring(0, 20)}...`);
-    console.log('  ✅ يعمل على أي منصة (Render, Railway, Fly.io)');
     console.log('========================================================');
     console.log('');
-});
-
-process.on('SIGINT', () => {
-    for (const state of clientStates.values()) {
-        if (state.pollingInterval) clearInterval(state.pollingInterval);
-    }
-    server.close();
-    process.exit(0);
 });
